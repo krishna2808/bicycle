@@ -1,0 +1,19 @@
+FROM node:alpine
+Run mkdir -p /app/project-bicycle/
+
+ADD . /app/project-bicycle/
+
+WORKDIR /app/project-bicycle/frontend/
+
+#RUN apt update && apt install npm &&  apt install npx
+#COPY package.json package-lock.json .
+
+RUN npm install
+# Expose the port on which the application will run
+
+#RUN npm audit fix --force
+EXPOSE 3000
+
+#COPY build/ .
+
+CMD ["npm", "start"]

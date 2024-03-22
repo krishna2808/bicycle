@@ -1,0 +1,80 @@
+version: '2'
+
+
+services:
+
+    frontend:
+        container_name: react.frontend
+
+        build:
+           context: .
+           dockerfile: Dockerfile.react
+        #volumes:
+            # source_code : destination_code # source code to --> to destination code
+            #- frontend_container_data:/app/project-bicycle/fronend
+            #- /home/krishna/Development/Django-project/project-bicycle/:/app/project-bicycle/
+        ports:
+            - 3000:3000
+
+        environment:
+            DEBUG: "True"
+
+
+    web_bicycle:
+        restart: unless-stopped
+        container_name: web.bicycle
+        build:
+            context: .
+            #dockerfile: bicycle/docker/Dockerfile
+        entrypoint: /app/project-bicycle/bicycle/docker/backend/entry-point/server-entrypoint.sh
+        volumes:
+            - backend_container_data:/app/project-bicycle/bicycle
+        ports:
+            - 8000:8000
+        environment:
+            DEBUG: "True"
+            CELERY_BROKER_URL: "redis://redis:6379/0"
+            CELERY_RESULT_BACKEND: "redis://redis:6379/0"
+            DJANGO_DB: bicycle
+            MYSQL_HOST: mysql.bicycle
+            MYSQL_NAME: mysql
+            MYSQL_USER: root
+            MYSQL_PASSWORD: password
+            MYSQL_PORT: 3306
+        depends_on:
+            - mysql
+
+    redis:
+        container_name: redis.bicycle
+        restart: unless-stopped
+        image: redis:7.0.5-alpine 
+        expose:
+            - 6379
+
+    mysql:
+        image: mysql:8
+        container_name: 'mysql.bicycle'
+        environment:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: bicycle
+        ports:
+          - 3306:3306
+        volumes:
+          - mysql-container-data:/var/lib/mysql
+
+    nginx:
+      #image: nginx:alpine
+      container_name: nginx.webserver.bicycle
+      build: nginx/
+      ports:
+        - 80:80
+        - 443:443
+      depends_on:
+        - web_bicycle
+
+
+volumes:
+    mysql-container-data:
+    backend_container_data:
+    #frontend_container_data:
+

@@ -1,0 +1,37 @@
+.forms{
+    margin:10%;
+
+}
+.show-error{
+	color: red;
+	/* margin-left: 8%; */
+	margin-left: auto;
+}
+.cart-image{
+    height:300px;
+	/* width: 200%; */
+
+}
+.card{	
+    height: 100%;
+}
+
+
+.rating {
+	font-size: 24px;
+  }
+  
+.star {
+	cursor: pointer;
+	color: #ccc;
+}
+  
+.star:hover,
+	.star.active {
+	color: #ffcc00;
+  }
+.profile-default, .cart-default {
+    width: 35px;
+	color: rgb(245, 238, 238);
+}
+ 
